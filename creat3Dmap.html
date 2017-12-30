@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>SceneView - 创建一个3D地图</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <!--使用script和link标签引用ArcGIS API for JavaScript-->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.6/"></script>
+    <script>
+        require(["esri/Map", "esri/views/SceneView", "dojo/domReady!"], function(Map, SceneView) {
+            var map = new Map({
+                basemap: "streets",
+                ground: "world-elevation" //ground指定地图的表面属性，字符串“world-elevation”使用世界高程服务指定地面的一个实例。
+            });
+            var view = new SceneView({
+                container: "viewDiv", // container为容器的意思，这里对将包含视图的DOM节点的引用，就是承载地图的div容器的id。
+                map: map, // 引用我们在上一步中创建的地图对象
+                scale: 500000, // 设置显示的比例尺的大小
+                center: [103.73, 36.03] // 设置中心显示的经纬度。这里设置的经纬度为我们大兰州，哈哈
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+</body>
+
+</html>
