@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World</title>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.23/dijit/themes/claro/claro.css"/>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.23/esri/css/esri.css"/>
+    <script src ="https://js.arcgis.com/3.23/init.js"></script>
+    <script>
+        require(["esri/map","esri/layers/ArcGISDynamicMapServiceLayer",
+                "dojo/domReady!"],
+            function(Map,ArcGISDynamicMapServiceLayer){
+                var map = new Map("mapDiv",{
+                    basemap:"topo",
+                    center:[103.719054,36.104579],
+                    zoom:14
+                });
+                //利用url创建一个动态地图服务对象
+                var layer=new ArcGISDynamicMapServiceLayer("http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer",{
+
+                });
+
+                //将地图服务对象添加到地图容器中
+                map.addLayer(layer);
+            })
+    </script>
+</head>
+<body class="claro">
+<div id="mapDiv" style="width:100%;; height:700px; border:1px solid #000;"></div>
+</body>
+</html>
