@@ -14,8 +14,13 @@
                 //利用url创建一个动态地图服务对象
                 var layer=new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/nongda/农大/MapServer",{
                 });
+//                var layerDefinitions=[];
+//                layerDefinitions[0]="POPULATION>5000000";
+//                layerDefinitions[5]="AREA>100000";
+//                layer.setLayerDefinitions(layerDefinitions);
                 //将地图服务对象添加到地图容器中
                 map.addLayer(layer);
+
             });
 
     </script>
