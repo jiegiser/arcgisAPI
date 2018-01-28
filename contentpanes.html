@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>内容面板</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/dojo/dijit/themes/tundra/tundra.css" />
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/dojo/dojox/layout/resources/FloatingPane.css" />
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <style>
+        .box {
+            margin-top: 5px;
+            color: #292929;
+            border: 1px solid #9F9F9F;
+            background-color: #EFEFEF;
+            padding-left: 10px;
+            padding-right: 20px;
+            margin-left: 10px;
+            margin-bottom: 1em;
+            border-radius: 10px;
+
+            -o-border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            box-shadow: 8px 8px 16px #adadad;
+            -webkit-box-shadow: 8px 8px 16px #adadad;
+            -moz-box-shadow: 8px 8px 16px #adadad;
+            -o-box-shadow: 8px 8px 16px #adadad;
+            overflow: hidden;
+        }
+    </style>
+    <script>
+        dojoConfig = {
+            isDebug: true,
+            async: true,
+            locale:'en'
+        };
+    </script>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script>
+        require(["dojo/parser", "dijit/layout/ContentPane", "dijit/form/Button", "dojo/domReady!"], function(parser){
+            parser.parse();
+        });
+
+        function makeAboutBox() {
+            require(["dojo/request", "dojo/_base/window", "dojo/dom-style", "dojox/layout/FloatingPane"], function (request, win, style, FloatingPane) {
+                var floaterDiv = document.createElement("div");
+                win.body().appendChild(floaterDiv);
+                floaterDiv.appendChild(document.createElement("br"));
+                var textarea = document.createElement("div");
+                textarea.innerHTML = "加载...";
+
+                floaterDiv.appendChild(textarea);
+                var tmp = new FloatingPane({
+                    title: "<b>关于本应用程序</b>",
+                    id: "aboutBox",
+                    closeable: true,
+                    resizable: true,
+                    dockable: false,
+                    resizeAxis: 'xy'
+                }, floaterDiv);
+                tmp.startup();
+
+                tmp.resize({
+                    w: 500,
+                    h: 500
+                });
+
+                style.set(tmp.domNode, "top", "100px");
+                style.set(tmp.domNode, "left", "100px");
+                style.set(tmp.domNode, "z-index", "500");
+
+                tmp.show();
+
+                request("index.html").then(function (response) {
+                        textarea.innerHTML = response;
+                    },
+                    function (response) {
+                        alert("出错，原因是" + response);
+                        textarea.innerHTML = '不能找到指定的HTML ';
+                    });
+
+                tmp.bringToTop();
+            });
+        }
+    </script>
+</head>
+<body class="tundra">
+<div data-dojo-type="dijit/layout/ContentPane" style="width:100px;height:200px;float:left">
+    <div data-dojo-type="dijit/form/Button">
+        相关信息
+        <script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">
+                makeAboutBox();
+            </script>
+    </div>
+</div>
+</body>
+</html>

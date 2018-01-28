@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dojo 事件机制</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/dojo/dijit/themes/tundra/tundra.css" />
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <style>
+        #myDiv{
+            height:200px;
+            width:100px;
+            background-color: #1b6d85;
+        }
+    </style>
+    <script>
+        require(["dojo/on","dojo/dom","dojo/dom-style","dojo/mouse","dojo/domReady!"],function (on,dom,domStyle,mouse) {
+            var myButton=dom.byId("myButton"),
+            myDiv=dom.byId("myDiv");
+            on(myButton,"click",function (evt) {
+                domStyle.set(myDiv,"backgrondColor","blue");
+            });
+            on(myDiv,mouse.enter,function (evt) {
+                domStyle.set(myDiv,"backgrondColor","red");
+            });
+            on(myDiv,mouse.leave,function (evt) {
+                domStyle.set(myDiv,"backgrondColor","");
+            });
+////            dojo的移除事件
+//            var handle=on(myButton,"click",function (evt) {
+////                移除时间监听器
+//                handle.remove();
+//                alert("This alert will only happen one time.")
+//            })
+////            自定义事件
+//            on(this,"onShowPanel",frame,"selectPanel")
+            require(["dojo/dom"],function (dom) {
+                var node=dom.byId("node");
+            });
+            require(["dojo/query"],function (query) {
+                query("#node");   //这里为# 符号，跟css id选择器一样
+            });
+            arr=query('a');
+            arr=query(".myDiv");//这里是 . 符号
+            arr=query('a:first-child');
+            arr=query("a","sub_1");
+            arr=query('#sub_1 a');
+            arr=query('div#sub_1 a');
+//            选择直接子元素
+            arr=query('> a',"sub_1");//大于后面要有空格
+            arr=query('#sub_1 > a');//大于号后面要有空格
+            arr=query('div#sub_1 > a');//大于号后面要有空格
+//           根据元素的属性值选择
+            arr=query('a[id=a2]');
+//            选择第 n 个元素
+            arr=query('a:nth-child');
+
+            arr=query('> a:nth-child(1)');
+//            选择奇（偶）元素
+            arr=query('a:nth-child(even)');
+            arr=query('> a:nth-child(even');
+        });
+        require(["dojo/parser", "dojo/domReady!"], function(parser){
+            parser.parse();
+        });
+    </script>
+</head>
+<body class="tundra">
+<button id="myButton" data-dojo-type="dijit/form/Button">点击</button>
+<div id="myDiv">鼠标悬停</div>
+</body>
+</html>
