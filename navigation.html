@@ -32,20 +32,108 @@
     <![endif]-->
     <script src="https://js.arcgis.com/3.23/"></script>
     <script>
-        require(["esri/map","esri/layers/ArcGISDynamicMapServiceLayer",
-                "dojo/domReady!"],
-            function(Map,ArcGISDynamicMapServiceLayer){
-                var map = new Map("mapDiv");
-                //利用url创建一个动态地图服务对象
-                var layer=new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/nongda/农大/MapServer",{
-                });
-//                var layerDefinitions=[];
-//                layerDefinitions[0]="POPULATION>5000000";
-//                layerDefinitions[5]="AREA>100000";
-//                layer.setLayerDefinitions(layerDefinitions);
-                //将地图服务对象添加到地图容器中
-                map.addLayer(layer);
+        var map, navToolbar;
+        var navOption; // 当前选择的操作
+        require(["dojo/parser", "esri/map", "esri/layers/ArcGISTiledMapServiceLayer", "esri/toolbars/navigation",
+                "dojo/query", 'dojo/_base/fx', "dojo/fx/easing", "dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojo/domReady!"],
+            function (parser, Map, ArcGISTiledMapServiceLayer, Navigation, query, fx, easing) {
+                parser.parse();
 
+                map = new Map("mapDiv", {
+                    logo: false,
+                    sliderStyle: "large"
+                });
+                var agoServiceURL = "http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer";
+                var agoLayer = new ArcGISTiledMapServiceLayer(agoServiceURL);
+                map.addLayer(agoLayer);
+
+                map.on('load', setupNavBar);
+
+                function setupNavBar() {
+                    navToolbar = new Navigation(map);
+
+                    query(".navItem img").onmouseover(function (evt) {
+                        fx.anim(evt.target.parentNode, {
+                            backgroundColor: '#CCCCCC'
+                        }, 200, easing.bounceOut);
+                    }).onmouseout(function (evt) {
+                        if (evt.target.parentNode.id != navOption) {
+                            fx.anim(evt.target.parentNode, {
+                                backgroundColor: '#FFFFFF'
+                            });
+                        }
+                        else {
+                            fx.anim(evt.target.parentNode, {
+                                backgroundColor: '#DADADA'
+                            });
+                        }
+                    }).onclick(function (evt) {
+
+                        fx.anim(evt.target.parentNode, {
+                            backgroundColor: '#999999'
+                        }, 200, easing.linear, function () {
+                            dojo.anim(evt.target.parentNode, {
+                                backgroundColor: '#CCCCCC'
+                            }, 0);
+                        });
+                        navEvent(evt.target.parentNode.id);
+                    });
+
+                    // 将漫游设置为默认操作
+                    navEvent('deactivate');
+                }
+
+                function navEvent(id) {
+                    switch (id) {
+                        case 'pan':
+                            map.enablePan();
+                            navToolbar.activate(Navigation.PAN);
+
+                            if (navOption) {
+                                fx.anim(document.getElementById(navOption), {
+                                    backgroundColor: '#FFFFFF'
+                                });
+                            }
+                            navOption = id;
+                            break;
+                        case 'zoomprev':
+                            navToolbar.zoomToPrevExtent();
+                            break;
+                        case 'zoomnext':
+                            navToolbar.zoomToNextExtent();
+                            break;
+                        case 'extent':
+                            navToolbar.zoomToFullExtent();
+                            break;
+                        case 'zoomin':
+                            navToolbar.activate(Navigation.ZOOM_IN);
+                            if (navOption) {
+                                fx.anim(document.getElementById(navOption), {
+                                    backgroundColor: '#FFFFFF'
+                                });
+                            }
+                            navOption = id;
+                            break;
+                        case 'zoomout':
+                            navToolbar.activate(Navigation.ZOOM_OUT);
+                            if (navOption) {
+                                fx.anim(document.getElementById(navOption), {
+                                    backgroundColor: '#FFFFFF'
+                                });
+                            }
+                            navOption = id;
+                            break;
+                        case 'deactivate':
+                            navToolbar.deactivate();
+                            if (navOption) {
+                                fx.anim(document.getElementById(navOption), {
+                                    backgroundColor: '#FFFFFF'
+                                });
+                            }
+                            navOption = id;
+                            break;
+                    }
+                }
             });
     </script>
 </head>
@@ -70,26 +158,33 @@
             <li><a href="#" id="identify"><span class="fa fa-list-alt"><div class="aside-text">属性查询</div></span>
             </a></li>
             <!-- 属性查询 -->
-
-            <li class="dropdown" id="panel-up1"><a href="#"><span class="fa fa-arrow-circle-o-up"><div class="aside-text">地图窗口操作</div></span></a>
+            <li class="dropdown" id="panel-up1"><a href="#"><span class="fa fa-arrow-circle-o-up"><div class="aside-text">地图操作</div></span></a>
                 <ul class="panel-sub-operate" id="dropdown-9">
                     <li>
-                        <a href="#" > <span class="fa fa-search-plus"><div class="aside-text">放大</div></span> </a>
+                        <a href="#" > <span class="fa fa-search-plus " >
+                                        <div id="zoomin" data-dojo-type="dijit/layout/ContentPane" class="navItem" data-dojo-props="splitter:'false'" style=" vertical-align : middle; overflow: hidden;">放大</div>
+
+
+                        </span>
+                        </a>
                     </li>
                     <li>
-                        <a href="#" > <span class="fa fa-search-minus"><div class="aside-text">缩小</div></span> </a>
+                        <a href="#" > <span class="fa fa-search-minus"><div class="aside-text" id="zoomout">缩小</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" > <span class="fa fa-arrows-alt"><div class="aside-text">全局视图</div></span> </a>
+                        <a href="#" id="extent"> <span class="fa fa-arrows-alt"><div class="aside-text">全局视图</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" > <span class="fa  fa-arrow-circle-left"><div class="aside-text">前一视图</div></span> </a>
+                        <a href="#" id="zoomprev"> <span class="fa  fa-arrow-circle-left"><div class="aside-text" >前一视图</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" > <span class="fa fa-arrow-circle-right"><div class="aside-text">后一视图</div></span> </a>
+                        <a href="#" id="zoomnext"> <span class="fa fa-arrow-circle-right"><div class="aside-text" >后一视图</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" > <span class="fa fa-globe"><div class="aside-text">漫游</div></span> </a>
+                        <a href="#" id="pan" > <span class="fa fa-globe"><div class="aside-text">漫游</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="deactivate" > <span class="fa fa-globe"><div class="aside-text">返回标准控制</div></span> </a>
                     </li>
                 </ul>
             </li>
