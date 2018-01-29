@@ -1,0 +1,55 @@
+.popup-attribute{
+  width:350px;
+  height:335px;
+  /*以下两句为边框的阴影效果*/
+  
+  }
+  .title{
+	width:350px;
+	height:35px;
+	background-color:#9ab26b;
+	padding-top:5px;
+	padding-left:10px;
+	padding-right:5px;
+	color:#FFF;
+	font-size:16px;
+  }
+  .close{
+	float:right;
+  }
+  .condition{
+	width:350px;
+	height:300px;
+	border:1px solid #CCC;
+	/*背景颜色渐变*/
+	background:-webkit-gradient(linear,0 0,0 100%,from(#FFFFCC),to(#CCFFCC));/* Chrome,Safari渐变 */
+	background:-moz-linear-gradient(top, #FFFFCC 0%, #CCFFCC 100%); /* Firefox渐变 */
+	background-image: linear-gradient(to bottom, #FFFFCC 0%, #CCFFCC 100%);
+	background-image: -webkit-linear-gradient(top, #FFFFCC 0%, #CCFFCC 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFCC', endColorstr='CCFFCC'); /* IE6,IE7渐变 */
+	-ms-filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFCC', endColorstr='CCFFCC')"; /* IE8渐变 */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFCC', endColorstr='CCFFCC', GradientType=0);
+		overflow:auto;
+  }
+  .text{
+	float:left;
+  }
+  .c-text{
+	width:170px;
+	height:25px;
+	margin-left:10px;
+	margin-top:12px;
+	font-size:14px;
+  }
+  .picture{
+	float:right;
+	width:125px;
+	height:100px;
+	margin-right:10px;
+	margin-top:15px;
+	border:1px solid #CCC;
+  }
+  .attribute-picture{
+	width:125px;
+	height:100px;
+  }

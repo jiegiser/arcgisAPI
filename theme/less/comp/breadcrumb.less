@@ -1,0 +1,82 @@
+
+.breadcrumb {
+  list-style: none;
+  display: block; 
+  border:1px solid @breadcrumb-border;
+  background: @breadcrumb-bg;
+}
+.breadcrumb .fa {
+  font-size: 20px;
+}
+.breadcrumb li {
+  float: left;
+  a{
+    display: block;
+    background: @breadcrumb-bg;
+    text-decoration: none;
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px 0 15px;
+    text-align: center;
+    margin-right: 23px;
+  }
+  // a,a:hover,a:focus{
+  //   color: #333;
+  // }
+} 
+
+
+.breadcrumb li:first-child a:before {
+  border: none;
+}
+ 
+// .breadcrumb li:last-child a:after {
+//   border: none;
+// }
+
+.breadcrumb li a:before, .breadcrumb li a:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  border: 0 solid @breadcrumb-bg;
+  border-width: 20px 10px;
+  width: 0;
+  height: 0;
+}
+.breadcrumb li a:before {
+  left: -20px;
+  border-left-color: transparent;
+}
+.breadcrumb li a:after {
+  left: 100%;
+  border-color: transparent;
+  border-left-color: @breadcrumb-bg;
+}
+
+// active   
+.breadcrumb .active a ,
+.breadcrumb .active:hover a{
+  color: @breadcrumb-active-color;
+  background-color: @breadcrumb-active-bg;
+  &:before{
+    border-color: @breadcrumb-active-bg;
+    border-left-color: transparent;  
+  }
+  &:after{
+    border-left-color: @breadcrumb-active-bg;      
+  }
+}
+// active hover
+.breadcrumb li:hover a {
+  color: @breadcrumb-hover-color;
+  background-color: @breadcrumb-hover-bg;
+  &:before{
+    border-color: @breadcrumb-hover-bg;
+    border-left-color: transparent;  
+  }
+  &:after{
+    border-left-color: @breadcrumb-hover-bg;      
+  }
+}
+

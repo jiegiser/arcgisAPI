@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>实现热地图</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial;
+        }
+        #main {
+            position: relative;
+            width: 1020px;
+            padding: 20px;
+            margin: auto;
+        }
+        #heatmapArea {
+            position: relative;
+            float: left;
+            width: 800px;
+            height: 600px;
+            border: 1px dashed black;
+        }
+        #configArea {
+            position: relative;
+            float: left;
+            width: 200px;
+            padding: 15px;
+            padding-top: 0;
+            padding-right: 0;
+        }
+        .btn {
+            margin-top: 25px;
+            padding: 10px 20px 10px 20px;
+            -moz-border-radius: 15px;
+            -o-border-radius: 15px;
+            -webkit-border-radius: 15px;
+            /*border-radius: 15px;*/
+            /*border: 2px solid black;*/
+            /*cursor: pointer;*/
+            /*!*color: white;*!*/
+            /*!*background-color: black;*!*/
+        }
+        #map {
+            width: 800px;
+            height: 600px;
+        }
+    </style>
+    <script type="text/javascript">
+        var dojoConfig = {
+            async: true,
+            packages: [{
+                "name": "bism",
+                "location": location.pathname.replace(/\/[^/]+$/, "") + "/js/bism"
+            }]
+        };
+    </script>
+    <script src="https://js.arcgis.com/3.23/"></script>
+    <script src="js/heatmap.js"></script>
+    <script type="text/javascript">
+        var map;
+        var heatLayer;
+        var featureLayer;
+
+        require(["esri/map", "esri/geometry/Extent", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/FeatureLayer", "esri/tasks/query",
+                "bism/HeatmapLayer", "dojo/dom", "dojo/on", "dojo/domReady!"],
+            function (Map, Extent, ArcGISTiledMapServiceLayer, FeatureLayer, Query, HeatmapLayer, dom, on) {
+                var initExtent = new Extent({
+                    xmax: -13624229.32056175,
+                    xmin: -13625120.886837104,
+                    ymax: 4548374.604660432,
+                    ymin: 4547966.144290476,
+                    "spatialReference": {
+                        "wkid": 102100
+                    }
+                });
+
+                map = new esri.Map("map", {
+                    extent: initExtent,
+                    sliderStyle: "small"
+                });
+                var basemap = new ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
+                map.addLayer(basemap);
+                map.on('load', function (theMap) {
+                    heatLayer = new HeatmapLayer({
+                        config: {
+                            "useLocalMaximum": true,
+                            "radius": 40,
+                            "gradient": {
+                                0.45: "rgb(000,000,255)",
+                                0.55: "rgb(000,255,255)",
+                                0.65: "rgb(000,255,000)",
+                                0.95: "rgb(255,255,000)",
+                                1.00: "rgb(255,000,000)"
+                            }
+                        },
+                        "map": map,
+                        "domNodeId": "heatLayer",
+                        "opacity": 0.85
+                    });
+                    // 在地图中将热度图图层
+                    map.addLayer(heatLayer);
+                    map.resize();
+                    // 创建一要素图层，从该图层中获取点要素
+                    featureLayer = new FeatureLayer("http://localhost:6080/arcgis/rest/services/nongda/农大/MapServer", {
+                        mode: FeatureLayer.MODE_ONDEMAND,
+                        visible: false
+                    });
+                    map.addLayer(featureLayer);
+                    // 从要素图层中获取点数据
+                    getFeatures();
+                    // 处理地图显示范围改变事件
+                    map.on("extent-change", getFeatures);
+                    on(dom.byId('tog'), "click", function () {
+                        if (heatLayer.visible) {
+                            heatLayer.hide();
+                        } else {
+                            heatLayer.show();
+                        }
+                    });
+                    on(dom.byId('tog2'), "click", function () {
+                        if (featureLayer.visible) {
+                            featureLayer.hide();
+                        } else {
+                            featureLayer.show();
+                        }
+                    });
+                });
+
+                // 从要素图层中的得到当前显示范围中的所有要素
+                function getFeatures() {
+                    // 创建查询
+                    var query = new Query();
+                    // 只查询当前显示范围内的要素
+                    query.geometry = map.extent;
+                    query.where = "1=1";
+                    query.outSpatialReference = map.spatialReference;
+
+                    featureLayer.queryFeatures(query, function (featureSet) {
+                        var data = [];
+                        if (featureSet && featureSet.features && featureSet.features.length > 0) {
+                            data = featureSet.features;
+                        }
+                        // 将数据赋给热度图图层
+                        heatLayer.setData(data);
+                    });
+                }
+
+            });
+    </script>
+</head>
+<body>
+<div id="main">
+    <div id="heatmapArea">
+        <div id="heatLayer"></div>
+        <div id="map"></div>
+    </div>
+
+    <div id="configArea">
+        <br />
+        <div id="tog" class="btn btn-default">开关热度图图层</div>
+        <div id="tog2" class="btn btn-default">开关树木点图层</div>
+    </div>
+</div>
+
+</body>
+</html>

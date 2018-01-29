@@ -1,0 +1,42 @@
+html{
+  height: 100%;
+}
+body{
+margin: 0;
+overflow: hidden;
+background: #fff;
+}
+#map{
+position: relative;
+height: 100%;
+
+width:100%;
+float:left;
+}
+.three-D{
+	width:50%;
+	height:100%;
+	background-color:#9ab26b;
+	float:left;
+	}
+#toolbar{
+position: relative;
+height: 33px;
+padding-top:5px;
+}
+ul {
+  list-style: none;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}

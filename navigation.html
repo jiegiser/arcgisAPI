@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8">
+    <meta name="description" content="Website">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管网系统</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">
+    <link rel="shortcut icon" href="" />
+    <link rel="stylesheet" href="theme/css/popup-attribute.css">
+    <!-- 字体插件 -->
+    <link rel="stylesheet" href="theme/css/font-awesome.css">
+    <!-- 字体插件 -->
+    <link rel="stylesheet" href="theme/css/bootstrap.css">
+    <!-- bootstrap插件 -->
+    <link rel="stylesheet" href="theme/css/humane/original.css">
+    <!-- humane提示插件皮肤 -->
+    <!-- <link rel="stylesheet" type="text/css" href="theme/css/bootstrap-theme.css"> -->
+    <link rel="stylesheet" href="theme/css/comp.css">
+    <!-- 各布局样式 -->
+    <link rel="stylesheet" href="theme/css/application.css">
+    <!-- 整体布局样式 -->
+    <link rel="stylesheet" href="theme/css/artDialog/simple.css">
+    <script type="text/javascript" src="libs/jquery/jquery.js"></script>
+    <script type="text/javascript" src="libs/humane/humane.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="assets/js/lib/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="assets/js/lib/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://js.arcgis.com/3.23/"></script>
+    <script>
+        require(["esri/map","esri/layers/ArcGISDynamicMapServiceLayer",
+                "dojo/domReady!"],
+            function(Map,ArcGISDynamicMapServiceLayer){
+                var map = new Map("mapDiv");
+                //利用url创建一个动态地图服务对象
+                var layer=new ArcGISDynamicMapServiceLayer("http://localhost:6080/arcgis/rest/services/nongda/农大/MapServer",{
+                });
+//                var layerDefinitions=[];
+//                layerDefinitions[0]="POPULATION>5000000";
+//                layerDefinitions[5]="AREA>100000";
+//                layer.setLayerDefinitions(layerDefinitions);
+                //将地图服务对象添加到地图容器中
+                map.addLayer(layer);
+
+            });
+    </script>
+</head>
+
+<body>
+
+
+<div class="header">
+    <ul class="breadcrumb clearfix">
+        <!-- fa是字体布局 ，在font-awesome.css里面-->
+        <li><a href="#" id="home"><span class="fa fa-home"> </span></a></li>
+         <li class="active"><a href="#">城市管网信息管理</a></li>
+        <!--<li><a>甘肃农业大学常杰作品</a></li>-->
+        <li id="welcome"><span id="user-name">请登录</span></li>
+    </ul>
+</div>
+<div class="main">
+    <div class="panel-map" id="mapDiv">
+    </div>
+    <div class="panel-aside">
+        <ul class="panel-operate">
+            <li><a href="#" id="identify"><span class="fa fa-list-alt"><div class="aside-text">属性查询</div></span>
+            </a></li>
+            <!-- 属性查询 -->
+
+            <li class="dropdown" id="panel-up1"><a href="#"><span class="fa fa-arrow-circle-o-up"><div class="aside-text">地图窗口操作</div></span></a>
+                <ul class="panel-sub-operate" id="dropdown-9">
+                    <li>
+                        <a href="#" > <span class="fa fa-search-plus"><div class="aside-text">放大</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" > <span class="fa fa-search-minus"><div class="aside-text">缩小</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" > <span class="fa fa-arrows-alt"><div class="aside-text">全局视图</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" > <span class="fa  fa-arrow-circle-left"><div class="aside-text">前一视图</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" > <span class="fa fa-arrow-circle-right"><div class="aside-text">后一视图</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" > <span class="fa fa-globe"><div class="aside-text">漫游</div></span> </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown"><a href="#" id="queryByArea"><span class="fa fa-search"><div class="aside-text">查询</div></span></a>
+                <!-- 点线面查询 -->
+                <ul class="panel-sub-operate" id="dropdown-1">
+                    <li>
+                        <a href="#" id="queryByPoint"> <span class="fa fa-th"><div class="aside-text">点查询</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="queryByLine"> <span class="fa fa-align-justify"><div class="aside-text">线查询</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="queryByPolygon"> <span class="fa fa-th-large"><div class="aside-text">面查询</div></span> </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown"><a href="#"><span class="fa fa-barcode"><div class="aside-text">量算</div></span></a>
+                <!-- 量算 -->
+                <ul class="panel-sub-operate" id="dropdown-2">
+                    <li>
+                        <a href="#" id="distancemeasure"> <span class="fa fa-arrows-h"><div class="aside-text">长度测量</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="areameasure"> <span class="fa fa-folder"><div class="aside-text">面积测量</div></span> </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul class="panel-query">
+            <li class="dropdown" id="panel-statistics"><a href="#"><span class="fa fa-bar-chart-o"><div class="aside-text">统计分析</div></span></a>
+                <!-- 统计分析 -->
+                <ul class="panel-sub-operate" id="dropdown-3">
+                    <li>
+                        <a href="#" id="chart-pipe"> <span class="fa fa-align-center"><div class="aside-text">管线分析</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="chart-valve"> <span class="fa fa-fire-extinguisher"><div class="aside-text">阀门分析</div></span> </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown" id="panel-reveal"><a href="#" id="leakOption"><span class="fa fa-chain-broken"><div class="aside-text" >泄漏分析</div></span></a>
+                <!-- 统计分析 -->
+                <ul class="panel-sub-operate" id="dropdown-4">
+                    <li>
+                        <a href="#" id="leakArea"> <span class="fa fa-cloud"><div class="aside-text">有害范围</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="leakAffect"> <span class="fa fa-building-o"><div class="aside-text">疏散住户</div></span> </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown" id="panel-pipeline"><a href="#"><span class="fa fa-beer"><div class="aside-text">管网分析</div></span></a>
+                <!-- 管网分析 -->
+                <ul class="panel-sub-operate" id="dropdown-5">
+                    <li>
+                        <a href="#" id="checkloop"> <span class="fa fa-sun-o"><div class="aside-text">检查环路</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="FindConnectedEdges"> <span class="fa fa-link"><div class="aside-text">连通查询</div></span> </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown" id="panel-up"><a href="#"><span class="fa fa-arrow-circle-o-up"><div class="aside-text">上游分析</div></span></a>
+                <ul class="panel-sub-operate" id="dropdown-6">
+                    <li>
+                        <a href="#" > <span class="fa fa-tint"><div class="aside-text">查找源</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" > <span class="fa fa-level-up"><div class="aside-text">上游追踪</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" > <span class="fa fa-cloud-upload"><div class="aside-text">最短上游</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" > <span class="fa fa-angle-double-up"><div class="aside-text">共同上游</div></span> </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown" id="panel-down"><a href="#"><span class="fa fa-arrow-circle-o-down"><div class="aside-text">下游分析</div></span></a>
+                <ul class="panel-sub-operate" id="dropdown-7">
+                    <li>
+                        <a href="#" id="FindSink"> <span class="fa fa-code-fork"><div class="aside-text">查找汇</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="traceDown"> <span class="fa fa-level-down"><div class="aside-text">下游追踪</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="FindPathDown"> <span class="fa fa-cloud-download"><div class="aside-text">最短下游</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="FindCommonCatchments"> <span class="fa fa-angle-double-down"><div class="aside-text">共同下游</div></span> </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="dropdown" id="panel-install"><a href="#"><span class="fa fa-cogs"><div class="aside-text">设置</div></span></a>
+                <!-- 管网分析 -->
+                <ul class="panel-sub-operate" id="dropdown-8">
+                    <li>
+                        <a href="#" id="userManage"> <span class="fa fa-user"><div class="aside-text">用户管理</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="addUser"> <span class="fa fa-plus-square-o"><div class="aside-text">添加用户</div></span> </a>
+                    </li>
+                    <li>
+                        <a href="#" id="ResetPw"> <span class="fa fa-lock"><div class="aside-text">修改密码</div></span> </a>
+                    </li>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+    <div class="control-dropdown" id="control-dropdown">
+        <!--     <div class="control-list" id="dixing">
+  <div class="control-text changeColor" id="text5" name="layersList">地形图</div>
+  <div class="control-pic" id="pic5" style="display: block;">√</div>
+</div> -->
+        <div class="control-list" id="jianzhu">
+            <div class="control-text changeColor" id="text6" name="layersList">建筑物</div>
+            <div class="control-pic" id="pic6" style="display: block;">√</div>
+        </div>
+        <div class="control-list">
+            <div class="control-text changeColor" id="text3" name="layersList">燃气管线</div>
+            <div class="control-pic" id="pic3" style="display: block;">√</div>
+        </div>
+
+        <div class="control-list" id="famen">
+            <div class="control-text changeColor" id="text4" name="layersList">燃气阀门</div>
+            <div class="control-pic" id="pic4" style="display: block;">√</div>
+        </div>
+        <div class="control-list" id="yingxiang">
+            <div class="control-text changeColor" id="text2" name="layersList">基础地图</div>
+            <div class="control-pic" id="pic2" style="display: block;">√</div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+<script>
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+// Mixin for generating new styles
+.sort-styles(@sort-color: #555) {
+  background: @sort-color;
+  #gradient > .vertical(@start-color: @sort-color; @end-color: darken(@sort-color, 12%));
+  .reset-filter(); // Disable gradients for IE9 because filter bleeds through rounded corners
+  background-repeat: repeat-x;
+  border-color: darken(@sort-color, 14%);
+ 
+}
+
+
+
+
+// search form
+.panel-left .inner{ 
+  .search{ 
+    padding: 15px;
+    background-color: rgb(236, 236, 236);
+    color:#797979; 
+    form{
+      margin:10px 0;
+      .clearfix();
+    }
+    form .form-group {
+      position: relative;
+      float: left;
+      .fa{
+        position: absolute;
+        right:10px;
+        top:8px;
+        font-size: 18px;
+        color:#ccc;
+      }
+      //todo  responsive
+      .search-input{
+        position: relative;
+        float: left;
+        display: inline-block;
+        width:270px;
+        padding-right:30px;
+        text-align: right;
+      }
+    }
+    .search-submit{
+      float: right;
+      width:90px;
+      // font-weight: bold;
+      color: @park-active-color;
+      background-color: @park-active-bg;
+    }
+  }
+
+}
+
+// search result
+.panel-left .inner{ 
+  .result{ 
+    position: relative;
+    min-height: 300px;
+    overflow: hidden;
+    z-index: 2;
+    .loading{
+      position: absolute;
+      left:0;
+      right:0;
+      margin-top:50px;
+      z-index: 2;
+      &:after{
+        display: block;
+        content:'loading';
+        text-align: center;        
+      }
+    }
+    .result-list{
+      position: relative;
+      z-index: 3;
+      background-color: white;
+    }
+  }
+
+  .result-list >ul{
+    li{
+      position: relative;
+      display: block;
+      height:85px;
+      padding:10px 20px 10px 60px;
+      font-size: 13px; 
+      border-bottom:1px solid #ddd; 
+      cursor: pointer;
+
+      .transition(all .15s linear);
+      &:hover{
+        background-color: @result-hover-bg;
+      }
+    }
+    li{
+      .status{
+        font-size: 13px;
+      }
+      .addr,.desc{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 4px 0;
+      }
+
+      .addr{
+        color:#999;
+      }
+
+      .desc{
+        color:#428BCA;
+      }
+
+      .sort{
+        color:white;
+      }
+
+      .sort{
+        position: absolute;
+        left:15px;
+        top:5px;
+        width:30px;
+        height:30px;
+        line-height: 26px;
+        text-align: center;
+        font-size: 14px;
+        border:1px solid #ddd;
+        .border-top-radius(15px);
+        .border-bottom-radius(15px);
+        text-shadow: 0 -1px 0 rgba(0,0,0,.2); 
+      }
+    }
+
+    .status-unknown{ 
+      .sort{
+        .sort-styles(@sort-unknown-bg);        
+      }
+      .status{
+        color: @sort-unknown-bg;
+      }
+    }
+    .status-full{ 
+      .sort{
+        .sort-styles(@sort-full-bg);        
+      }
+      .status{
+        color: @sort-full-bg;
+      }
+    }
+    .status-avail{ 
+      .sort{
+        .sort-styles(@sort-avail-bg);        
+      }
+      .status{
+        color: @sort-avail-bg;
+      }
+    }
+  } 
+}
+
+// search page 
+.panel-left .page{
+  text-align: center;
+}
+
+// theme
+.panel-left .inner{
+  position: relative;
+  z-index: 2; 
+  height: 100%;
+  overflow-y: auto;
+  background-color: white; 
+}
+
+
+//left switch
+.panel-left .switch{
+  display: block;
+  position: absolute;
+  z-index: 1;
+  right:-20px;
+  top:40%;
+  width: 25px;
+  height:40px;
+  line-height: 38px;
+  text-align: center;
+  overflow: hidden;
+  .user-select(none);
+  cursor: pointer;
+  // background-color: #ddd;
+  .border-right-radius(3px);
+  .box-shadow(3px 0 12px rgba(0,0,0,.175));
+  .btn-styles(#fff);
+
+  .transition(right .15s linear);
+  &:hover{
+    right:-24px;
+  }
+  &:active .fa{
+    font-size: 16px;
+    line-height: 40px;
+  }
+}
+
+.panel-left .switch{
+  input{ 
+    position: absolute;
+    top:-50px;
+  }
+
+  .left{
+    display: none;
+  }
+  .right{
+    display: inline;
+  }
+}
+.panel-left .switch.switch-open{
+  .left{
+    display: inline;
+  }
+  .right{
+    display: none;
+  }
+}
+ 

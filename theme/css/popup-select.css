@@ -1,0 +1,385 @@
+﻿body{
+	font-size:12px;
+	text-align:center;
+	margin: 0;
+}
+.select{
+	width:917px;
+	height:517px;
+	border:1px solid #BDC3C7;     /*灰色*/
+	padding-bottom:10px;
+}
+.title{
+	background-color:#9AB26B;
+	border:1px solid #eee;
+	height:25px;
+	font-size:16px;
+	text-align:left;
+	color:#FFF;
+	font-weight:bold;
+	padding-top:5px;
+	padding-left:5px;
+}
+.btn-complete{
+	float:right;
+	margin-top:0px;
+	margin-right:7px;
+}
+
+/*基础图层*/
+
+/*基础图层被选中时的样式*/
+/*使用JQuery.toggleClass方法增加、移除CSS*/
+.basic-highlight{   
+	background-color: #9966FF;     /*紫色*/
+	color:#FFF;
+}
+.basic-layer{
+	width:906px;
+	height:27px;
+	border-bottom:#eee 1px dashed;
+	padding:5px 5px 5px 5px;
+}
+.basic-box{
+	float:left;
+	width:100px;
+	height:25px;
+	border-right:#eee 1px dashed;
+}
+.basic{
+	margin-top:5px;
+	margin-left:5px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:3px;
+	color:#9966FF;
+	font-size:14px;
+	font-weight:bold;
+}
+.village-label-box{
+	float:left;
+	width:198px;
+	height:25px;
+	border-right:#eee 1px dashed;
+}
+.village-label{
+	margin-top:1px;
+	margin-left:55px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:3px;
+	cursor:pointer;
+}
+.village-label:hover{
+	border:1px solid #9966FF;
+}
+.village-name-box{
+	float:left;
+	width:600px;
+	height:25px;
+}
+.village-name-box span{
+	float:left;
+	margin-top:5px;
+	margin-left:25px;
+	cursor:pointer;
+	border:1px solid transparent;
+	cursor:pointer;
+}
+.village-name-box span:hover{
+	border:1px solid #9966FF;
+}
+
+/*建筑物图层*/
+.building-highlight{   
+	background-color: #999999;      /*灰色*/
+	color:#FFF;
+}
+.building-layer{
+	width:906px;
+	height:27px;
+	border-bottom:#eee 1px dashed;
+	padding:5px 5px 5px 5px;
+}
+.building-box{
+	float:left;
+	width:100px;
+	height:25px;
+	border-right:#eee 1px dashed;
+}
+.building{
+	margin-top:5px;
+	margin-left:5px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:3px;
+	color:#999999;
+	font-size:14px;
+	font-weight:bold;
+}
+.house-building-box{
+	float:left;
+	width:198px;
+	height:25px;
+	border-right:#eee 1px dashed;
+}
+.house-building{
+	margin-top:1px;
+	margin-left:55px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:3px;
+	cursor:pointer;
+}
+.house-building:hover{
+	border:1px solid #999999;
+}
+.house-building-field{
+	float:left;
+	width:600px;
+	height:25px;
+}
+.house-building-field span{
+	float:left;
+	margin-top:5px;
+	margin-left:25px;
+	cursor:pointer;
+	border:1px solid transparent;
+	cursor:pointer;
+}
+.house-building-field span:hover{
+	border:1px solid #999999;
+}
+
+/*燃气管线图层*/
+.pipeline-highlight{   
+	background-color: #6E9129;      /*绿色*/
+	color:#FFF;
+}
+.pipeline-layer{
+	width:906px;
+	height:201px;
+	border-bottom:#eee 1px dashed;
+	padding:5px 5px 5px 5px;
+}
+.gas-pipeline-box{
+	float:left;
+	width:100px;
+	height:201px;
+	border-right:#eee 1px dashed;
+}
+.gas-pipeline{
+	margin-top:65px;
+	margin-left:5px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:5px;
+	color:#6E9129;
+	font-size:14px;
+	font-weight:bold;
+}
+.pipeline-over-under{
+	float:left;
+	width:800px;
+	height:200px;
+}
+.pipeline-overground{
+	width:806px;
+	height:99px;
+	border-bottom:#eee 1px dashed;
+}
+.p-over-box{
+	float:left;
+	width:198px;
+	height:99px;
+	border-right:#eee 1px dashed;
+}
+.p-over{
+	margin-top:30px;
+	margin-left:55px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:5px;
+	cursor:pointer;
+}
+.p-over:hover{
+	border:1px solid #6E9129;
+}
+.p-over-field{
+	float:left;
+	width:598px;
+	height:98px;
+}
+.pipeline-underground{
+	width:800px;
+	height:99px;
+}
+.p-under-box{
+	float:left;
+	width:198px;
+	height:99px;
+	border-right:#eee 1px dashed;
+}
+.p-under{
+	margin-top:40px;
+	margin-left:55px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:5px;
+	cursor:pointer;
+}
+.p-under:hover{
+	border:1px solid #6E9129;
+}
+.p-under-field{
+	float:left;
+	width:598px;
+	height:98px;
+}
+.p-over-field span{
+	float:left;
+	margin-top:12px;
+	margin-left:25px;
+	cursor:pointer;
+	border:1px solid transparent;
+}
+.p-over-field span:hover{
+	border:1px solid #6E9129;
+}
+.p-under-field span{
+	float:left;
+	margin-top:12px;
+	margin-left:25px;
+	cursor:pointer;
+	border:1px solid transparent;
+}
+.p-under-field span:hover{
+	border:1px solid #6E9129;
+}
+
+/*燃气阀门图层*/
+.tap-highlight{   
+	background-color: #EE811A;     /*橙色*/
+	color:#FFF;
+}
+.tap-layer{
+	width:906px;
+	height:203px;
+	padding:5px 5px 5px 5px;
+}
+.gas-tap-box{
+	float:left;
+	width:100px;
+	height:201px;
+	border-right:#eee 1px dashed;
+}
+.gas-tap{
+	margin-top:65px;
+	margin-left:5px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:5px;
+	color:#EE811A;
+	font-size:14px;
+	font-weight:bold;
+}
+.tap-over-under{
+	float:left;
+	width:800px;
+	height:200px;
+}
+.tap-overground{
+	width:806px;
+	height:99px;
+	border-bottom:#eee 1px dashed;
+}
+.t-over-box{
+	float:left;
+	width:198px;
+	height:99px;
+	border-right:#eee 1px dashed;
+}
+.t-over{	
+	margin-top:30px;
+	margin-left:55px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:5px;
+	cursor:pointer;
+}
+.t-over:hover{
+	border:1px solid #EE811A;
+}
+.t-over-field{
+	float:left;
+	width:598px;
+	height:98px;
+}
+.tap-underground{
+	width:800px;
+	height:99px;
+}
+.t-under-box{
+	float:left;
+	width:198px;
+	height:99px;
+	border-right:#eee 1px dashed;
+}
+.t-under{
+	margin-top:40px;
+	margin-left:55px;
+	width:90px;
+	height:20px;
+	text-align:center;
+	border:1px solid transparent;
+	padding-top:5px;
+	cursor:pointer;
+}
+.t-under:hover{
+	border:1px solid #EE811A;
+}
+.t-under-field{
+	float:left;
+	width:598px;
+	height:98px;
+}
+.t-over-field span{
+	float:left;
+	margin-top:12px;
+	margin-left:25px;
+	cursor:pointer;
+	border:1px solid transparent;
+}
+.t-over-field span:hover{
+	border:1px solid #EE811A;
+}
+.t-under-field span{
+	float:left;
+	margin-top:12px;
+	margin-left:25px;
+	cursor:pointer;
+	border:1px solid transparent;
+}
+.t-under-field span:hover{
+	border:1px solid #EE811A;
+}
+
+

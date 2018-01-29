@@ -1,0 +1,83 @@
+// Mixin for generating new styles
+.btn-styles(@btn-color: #555) {
+  background: @btn-color;
+  #gradient > .vertical(@start-color: @btn-color; @end-color: darken(@btn-color, 12%));
+  .reset-filter(); // Disable gradients for IE9 because filter bleeds through rounded corners
+  background-repeat: repeat-x;
+  border-color: darken(@btn-color, 14%);
+ 
+}
+ 
+.header{
+  position: relative;
+  z-index: @layout-zIndex;
+
+  .box-shadow( 0 3px  3px rgba(0,0,0,.175));
+  background-clip: padding-box;
+}
+.main{
+  position: absolute;
+  top:42px;
+  bottom:0;
+  width:100%;
+  overflow: hidden;
+  background-color: #ddd;
+}
+//todo  responsive
+.panel-left{ 
+  // position: relative;
+  position: absolute;
+  top:0;
+  left:0;
+  bottom: 0;
+  z-index: @layout-zIndex + 1;
+  width: 400px;
+  height:100%;
+  border-right:1px solid #ddd;
+  background-color: white;
+  .box-shadow(3px 3px 3px rgba(0,0,0,.175));
+
+}
+
+
+.panel-map{
+  position: relative;
+  height: 100%;
+  width:100%;
+  
+}
+
+.main{
+  .panel-left{
+    // .transition(left .15s ease-in-out);
+  }
+  .panel-map{
+    margin-left: 400px;
+    // .transition(margin-left 0.15s ease-in-out);
+  }
+  &.panel-hide{
+    .panel-left{
+      left: -400px;
+    }
+    .panel-map{
+      margin-left: 0;
+    }
+  }
+}
+
+ 
+.main{
+  padding-right: 60px;
+  
+  .panel-aside{
+    position: absolute;
+    top:0;
+    right:0;
+    bottom: 0;
+    z-index: @layout-zIndex - 1;
+    width:60px;
+    height:100%;
+    .box-shadow(-3px 3px 3px rgba(0,0,0,.175)); 
+  }
+}
+
