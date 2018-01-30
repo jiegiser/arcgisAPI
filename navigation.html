@@ -38,8 +38,11 @@
                 "dojo/query", "dojo/domReady!"],
             function (parser, Map, ArcGISDynamicMapServiceLayer, Navigation, query) {
                 map = new Map("mapDiv");
-                var agoServiceURL ="http://localhost:6080/arcgis/rest/services/nongda/农大/MapServer";
-                var agoLayer = new ArcGISDynamicMapServiceLayer(agoServiceURL);
+                var agoServiceURL ="http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer";
+                var agoLayer = new ArcGISDynamicMapServiceLayer(agoServiceURL,{
+                    center: [103.719054,36.104579],
+                    zoom: 10
+                });
                 map.addLayer(agoLayer);
 
                 map.on('load', setupNavBar);
