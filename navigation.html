@@ -31,54 +31,25 @@
     <script src="assets/js/lib/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
     <script src="https://js.arcgis.com/3.23/"></script>
-    <script>
+    <script type="text/javascript">
         var map, navToolbar;
         var navOption; // 当前选择的操作
-        require(["dojo/parser", "esri/map", "esri/layers/ArcGISTiledMapServiceLayer", "esri/toolbars/navigation",
-                "dojo/query", 'dojo/_base/fx', "dojo/fx/easing", "dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojo/domReady!"],
-            function (parser, Map, ArcGISTiledMapServiceLayer, Navigation, query, fx, easing) {
-                parser.parse();
-
-                map = new Map("mapDiv", {
-                    logo: false,
-                    sliderStyle: "large"
-                });
-                var agoServiceURL = "http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer";
-                var agoLayer = new ArcGISTiledMapServiceLayer(agoServiceURL);
+        require(["dojo/parser", "esri/map", "esri/layers/ArcGISDynamicMapServiceLayer", "esri/toolbars/navigation",
+                "dojo/query", "dojo/domReady!"],
+            function (parser, Map, ArcGISDynamicMapServiceLayer, Navigation, query) {
+                map = new Map("mapDiv");
+                var agoServiceURL ="http://localhost:6080/arcgis/rest/services/nongda/农大/MapServer";
+                var agoLayer = new ArcGISDynamicMapServiceLayer(agoServiceURL);
                 map.addLayer(agoLayer);
 
                 map.on('load', setupNavBar);
 
                 function setupNavBar() {
                     navToolbar = new Navigation(map);
-
-                    query(".navItem img").onmouseover(function (evt) {
-                        fx.anim(evt.target.parentNode, {
-                            backgroundColor: '#CCCCCC'
-                        }, 200, easing.bounceOut);
-                    }).onmouseout(function (evt) {
-                        if (evt.target.parentNode.id != navOption) {
-                            fx.anim(evt.target.parentNode, {
-                                backgroundColor: '#FFFFFF'
-                            });
-                        }
-                        else {
-                            fx.anim(evt.target.parentNode, {
-                                backgroundColor: '#DADADA'
-                            });
-                        }
-                    }).onclick(function (evt) {
-
-                        fx.anim(evt.target.parentNode, {
-                            backgroundColor: '#999999'
-                        }, 200, easing.linear, function () {
-                            dojo.anim(evt.target.parentNode, {
-                                backgroundColor: '#CCCCCC'
-                            }, 0);
-                        });
+//                    获取到类名为aside的div，然后添加onclick事件，并获取父节点的id
+                    query(".aside").onclick(function (evt) {
                         navEvent(evt.target.parentNode.id);
                     });
-
                     // 将漫游设置为默认操作
                     navEvent('deactivate');
                 }
@@ -88,12 +59,6 @@
                         case 'pan':
                             map.enablePan();
                             navToolbar.activate(Navigation.PAN);
-
-                            if (navOption) {
-                                fx.anim(document.getElementById(navOption), {
-                                    backgroundColor: '#FFFFFF'
-                                });
-                            }
                             navOption = id;
                             break;
                         case 'zoomprev':
@@ -107,29 +72,14 @@
                             break;
                         case 'zoomin':
                             navToolbar.activate(Navigation.ZOOM_IN);
-                            if (navOption) {
-                                fx.anim(document.getElementById(navOption), {
-                                    backgroundColor: '#FFFFFF'
-                                });
-                            }
                             navOption = id;
                             break;
                         case 'zoomout':
                             navToolbar.activate(Navigation.ZOOM_OUT);
-                            if (navOption) {
-                                fx.anim(document.getElementById(navOption), {
-                                    backgroundColor: '#FFFFFF'
-                                });
-                            }
                             navOption = id;
                             break;
                         case 'deactivate':
                             navToolbar.deactivate();
-                            if (navOption) {
-                                fx.anim(document.getElementById(navOption), {
-                                    backgroundColor: '#FFFFFF'
-                                });
-                            }
                             navOption = id;
                             break;
                     }
@@ -161,30 +111,29 @@
             <li class="dropdown" id="panel-up1"><a href="#"><span class="fa fa-arrow-circle-o-up"><div class="aside-text">地图操作</div></span></a>
                 <ul class="panel-sub-operate" id="dropdown-9">
                     <li>
-                        <a href="#" > <span class="fa fa-search-plus " >
-                                        <div id="zoomin" data-dojo-type="dijit/layout/ContentPane" class="navItem" data-dojo-props="splitter:'false'" style=" vertical-align : middle; overflow: hidden;">放大</div>
-
-
+                        <a href="#" id="zoomin" class="aside">
+                        <span class="fa fa-search-plus " >
+                          <div  class="aside-text" >放大</div>
                         </span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" > <span class="fa fa-search-minus"><div class="aside-text" id="zoomout">缩小</div></span> </a>
+                        <a href="#" id="zoomout" class="aside"> <span class="fa fa-search-minus"><div class="aside-text" >缩小</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" id="extent"> <span class="fa fa-arrows-alt"><div class="aside-text">全局视图</div></span> </a>
+                        <a href="#" id="extent" class="aside"> <span class="fa fa-arrows-alt"><div class="aside-text">全局视图</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" id="zoomprev"> <span class="fa  fa-arrow-circle-left"><div class="aside-text" >前一视图</div></span> </a>
+                        <a href="#" id="zoomprev" class="aside"> <span class="fa  fa-arrow-circle-left"><div class="aside-text" >前一视图</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" id="zoomnext"> <span class="fa fa-arrow-circle-right"><div class="aside-text" >后一视图</div></span> </a>
+                        <a href="#" id="zoomnext" class="aside"> <span class="fa fa-arrow-circle-right"><div class="aside-text" >后一视图</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" id="pan" > <span class="fa fa-globe"><div class="aside-text">漫游</div></span> </a>
+                        <a href="#" id="pan" class="aside"> <span class="fa fa-globe"><div class="aside-text">漫游</div></span> </a>
                     </li>
                     <li>
-                        <a href="#" id="deactivate" > <span class="fa fa-globe"><div class="aside-text">返回标准控制</div></span> </a>
+                        <a href="#" id="deactivate" class="aside"> <span class="fa fa-globe"><div class="aside-text">返回标准控制</div></span> </a>
                     </li>
                 </ul>
             </li>
@@ -304,36 +253,9 @@
     </div>
 </div>
 
-    <div class="control-dropdown" id="control-dropdown">
-        <!--     <div class="control-list" id="dixing">
-  <div class="control-text changeColor" id="text5" name="layersList">地形图</div>
-  <div class="control-pic" id="pic5" style="display: block;">√</div>
-</div> -->
-        <div class="control-list" id="jianzhu">
-            <div class="control-text changeColor" id="text6" name="layersList">建筑物</div>
-            <div class="control-pic" id="pic6" style="display: block;">√</div>
-        </div>
-        <div class="control-list">
-            <div class="control-text changeColor" id="text3" name="layersList">燃气管线</div>
-            <div class="control-pic" id="pic3" style="display: block;">√</div>
-        </div>
-
-        <div class="control-list" id="famen">
-            <div class="control-text changeColor" id="text4" name="layersList">燃气阀门</div>
-            <div class="control-pic" id="pic4" style="display: block;">√</div>
-        </div>
-        <div class="control-list" id="yingxiang">
-            <div class="control-text changeColor" id="text2" name="layersList">基础地图</div>
-            <div class="control-pic" id="pic2" style="display: block;">√</div>
-        </div>
-
-    </div>
-
 </div>
 </div>
-<script>
 
-</script>
 </body>
 
 </html>
