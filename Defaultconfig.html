@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.23/dijit/themes/claro/claro.css"/>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.23/esri/css/esri.css"/>
+    <style>
+        html, body, #mapDiv {
+            padding: 0;
+            margin: 0;
+            width:100%;
+            height: 100%;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.23/"></script>
+    <script type="text/javascript">
+        var map;
+        require(["esri/map", "esri/layers/ArcGISTiledMapServiceLayer", "esri/config", "esri/symbols/SimpleFillSymbol", "esri/symbols/SimpleLineSymbol", "dojo/_base/Color", "dojo/domReady!"],
+            function (Map, ArcGISTiledMapServiceLayer, esriConfig, SimpleFillSymbol, SimpleLineSymbol, Color) {
+                esriConfig.defaults.map.panDuration = 1000;
+                esriConfig.defaults.map.panRate = 50;
+                esriConfig.defaults.map.zoomDuration = 1000;
+                esriConfig.defaults.map.zoomRate = 50;
+                var zoomSymbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                    new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_DASHDOT, new Color([0, 0, 255]), 2),
+                    new Color([255, 255, 0, 0.5]));
+                esriConfig.defaults.map.zoomSymbol = zoomSymbol.toJson();
+
+                map = new Map("mapDiv", {
+                    logo: false
+                });
+                var agoServiceURL = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer";
+                agoLayer = new ArcGISTiledMapServiceLayer(agoServiceURL);
+                map.addLayer(agoLayer);
+            });
+    </script>
+</head>
+<body class="tundra">
+<div id="mapDiv">
+    <div id="mapPosition" style="background-color:whitesmoke; font-weight:bolder; font-size:smaller; position:absolute; padding:3px;left:30px; bottom:6px; z-index:99;"></div>
+</div>
+</body>
+</html>
