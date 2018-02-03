@@ -36,6 +36,10 @@
         .esriLayerList .esriList ul{
             background-color: #fff;
         }
+        .esriLabel{
+            background-color:#AAEEFF ;
+            border-radius: 10px;
+        }
     </style>
     <script>var dojoConfig = { parseOnLoad: true };</script>
     <script src="https://js.arcgis.com/3.23/"></script>
@@ -50,8 +54,8 @@
             arcgisUtils,
             LayerList
         ) {
-            //Create a map based on an ArcGIS Online web map id
-            arcgisUtils.createMap("f63fed3f87fc488489e27c026fa5d434", "map").then(function(response){
+            //创建一个地图基于ID的ArcGIS在线网站地图
+            arcgisUtils.createMap("15fb078d982f46bb975daa3edc9a6df1", "map").then(function(response){
                 var myWidget = new LayerList({
                     map: response.map,
                     layers: arcgisUtils.getLayerList(response)
@@ -65,7 +69,7 @@
 <body class="claro">
 <div class="container" data-dojo-type="dijit/layout/BorderContainer"
      data-dojo-props="design:'headline',gutters:false">
-    <div id="layerListPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'right'">
+    <div id="layerListPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'right'" style="left: 938px; top: 0px; position: absolute; height: 670px; border-style: solid; border-width: 1px 1px 1px 1px; border-radius: 10px;background-color: rgba(255,255,255,0.15); z-index: 2000">
         <div id="layerList"></div>
     </div>
     <div id="map" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'"></div>
