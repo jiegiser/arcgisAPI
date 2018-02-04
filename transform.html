@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>空间参考系统测试</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #mapDiv{
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script>
+        var map,gsvs;
+        require(["esri/geometry/Extent", "esri/map", "esri/layers/ArcGISTiledMapServiceLayer",
+                "esri/SpatialReference", "esri/tasks/GeometryService", "esri/geometry/webMercatorUtils", "esri/geometry/Point",
+                "dojo/domReady!"],
+            function (Extent, Map, ArcGISTiledMapServiceLayer, SpatialReference, GeometryService, webMercatorUtils, Point) {
+            map = new esri.Map("mapDiv");
+            var layer = new ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer");
+            map.addLayer(layer);
+            map.setExtent(
+//                设置显示范围
+                new Extent(-144.13, 7.98, -52.76, 68.89,
+//                设置地理坐标系为WGS84
+                new SpatialReference({ wkid: 4326 })));
+//            调用服务器的几何对象服务
+//            表示GeometryService的ArcGIS Server REST资源的URL https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer。有关构建URL的更多信息，请参阅ArcGIS Services目录
+                gsvc = new GeometryService("http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+                map.on("click", projectToWebMercator);
+
+                function projectToWebMercator(evt) {
+
+                    map.graphics.clear();
+
+                    var point = evt.mapPoint;
+                    var outSR = new SpatialReference({ wkid: 102113 });
+
+                    // 利用webMercatorUtils模块转换坐标
+                    var wm = webMercatorUtils.geographicToWebMercator(point);
+                    // 利用我们自己的计算方法转换坐标
+                    var we = toWebMercator(point);
+//                利用服务器的几何对象服务进行转换
+                    gsvc.project([point], outSR, function (projectedPoints) {
+                        pt = projectedPoints[0];
+                        var desc1 = "通过服务得到的坐标:<br/>" + pt.x.toFixed(3) + ";" + pt.y.toFixed(3);
+                        var desc2 = "功能函数计算的坐标:<br/>" + wm.x.toFixed(3) + ";" + wm.y.toFixed(3);
+                        var desc3 = "自己函数计算的坐标:<br/>" + we.x.toFixed(3) + ";" + we.y.toFixed(3);
+                        document.getElementById("spatialReference").innerHTML = desc1 + "<br/>" + desc2 + "<br/>" + desc3;
+                    });
+                }
+
+                function toWebMercator(pt) {
+                    var num = pt.x * 0.017453292519943295;
+                    var x = 6378137.0 * num;
+                    var a = pt.y * 0.017453292519943295;
+                    var y = 3189068.5 * Math.log((1.0 + Math.sin(a)) / (1.0 - Math.sin(a)));
+
+                    return new Point({ "x": x, "y": y, "spatialReference": { "wkid": 102113 } });
+                }
+            });
+    </script>
+</head>
+<body>
+<div id="main">
+    <div style="height: 60px;text-align: center">
+        <h3>功能：投影转换测试</h3>
+    </div>
+    <div id="mapDiv" >
+        <div id="coords" style="font-size:10pt; color:gray;"></div>
+    </div>
+    <div  style="width: 200px; right: 5px;position: absolute; top: 77px;height: 600px;" class="panel panel-primary">
+        <div class="panel panel-heading">相关信息</div>
+        <div class="panel panel-body" id="spatialReference"></div>
+
+    </div>
+</div>
+
+</body>
+</html>
