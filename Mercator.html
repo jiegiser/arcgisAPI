@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>空间参考系统测试</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>
+#mapDiv{
+    height: 600px;
+    width: 100%;
+}
+    </style>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script>
+        var map, topo, streetMap, usa, taxParcel;
+
+        require(["dojo/dom",
+                "dojo/on", "esri/geometry/Extent",
+                "esri/map", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/ArcGISDynamicMapServiceLayer",
+                "dijit/layout/BorderContainer", "dijit/layout/ContentPane",
+                "dijit/form/Button",
+                "dojo/domReady!"],
+            function (dom,on,Extent, Map, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer) {
+//                parser.parse();
+//                    设置显示范围的参数
+                var initialExtent = new Extent({
+//                    设置显示的大小
+                    "xmin": -9749695.83182828, "ymin": 4387485.423567985,
+                    "xmax": -8230739.205745666, "ymax": 5374440.332785915,
+//                    设置地理坐标系为WGS1984
+                    "spatialReference": { "wkid": 102100 }
+                });
+
+                map = new esri.Map("mapDiv", { extent: initialExtent });
+//              通过registry.byId获取到button的id，添加click事件，来实现各种投影的转换
+                  on(dom.byId("addSameTiledLayer"), "click", addSameTiledLayer);
+                  on(dom.byId("addDifferentTiledLayer"), "click", addDifferentTiledLayer);
+                  on(dom.byId("addGeoDynamicLayer"), "click", addGeoDynamicLayer);
+                  on(dom.byId("addProjDynamicLayer"), "click", addProjDynamicLayer);
+                map.on("layer-add", function (evt) {
+                    var layer = evt.layer;
+                    document.getElementById("spatialReference").innerHTML = "地图的空间参考系统为:" + map.spatialReference.wkid + ";<p>图层的空间参考系统为:" + layer.spatialReference.wkid + "</p>";
+                });
+
+                map.on("mouse-move", function (evt) {
+                    document.getElementById("coords").innerHTML = "X: " + evt.mapPoint.x + " | Y: " + evt.mapPoint.y;
+                });
+
+                function addSameTiledLayer() {
+                    map.removeAllLayers();
+                    if (!topo) {
+                        var topoUrl = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer";
+                        topo = new ArcGISTiledMapServiceLayer(topoUrl);
+                    }
+
+                    map.addLayer(topo);
+                }
+
+                function addDifferentTiledLayer() {
+                    map.removeAllLayers();
+                    if (!streetMap) {
+                        var streetMapUrl = "http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer";
+                        streetMap = new esri.layers.ArcGISTiledMapServiceLayer(streetMapUrl);
+                    }
+
+                    map.addLayer(streetMap);
+                }
+
+                function addGeoDynamicLayer() {
+                    map.removeAllLayers();
+                    if (!usa) {
+                        var usaUrl = "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Specialty/ESRI_StatesCitiesRivers_USA/MapServer";
+                        usa = new esri.layers.ArcGISDynamicMapServiceLayer(usaUrl);
+                    }
+
+                    map.addLayer(usa);
+                }
+
+                function addProjDynamicLayer() {
+                    map.removeAllLayers();
+                    if (!taxParcel) {
+                        var taxParcelUrl = "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/TaxParcel/TaxParcelQuery/MapServer";
+                        taxParcel = new esri.layers.ArcGISDynamicMapServiceLayer(taxParcelUrl);
+                    }
+
+                    map.addLayer(taxParcel);
+                }
+            });
+
+    </script>
+</head>
+<body>
+<div id="main">
+    <div style="height: 60px;text-align: center">
+        <h3>功能：空间参考系统测试</h3>
+    </div>
+    <div id="mapDiv" >
+        <div id="coords" style="font-size:10pt; color:gray;">    </div>
+    </div>
+    <div  style="width: 200px; right: 0;top: 100px; position: absolute; height: 578px;" class="panel panel-primary">
+        <div class="panel panel-heading">相关信息</div>
+        <div class="panel panel-body" id="spatialReference"></div>
+
+    </div>
+    <div style="height: 50px; text-align: center" >
+        <button id="addSameTiledLayer" class="btn btn-primary">增加相同坐标系统切片图层</button>
+        <button id="addDifferentTiledLayer" class="btn btn-primary">增加不同坐标系统切片图层</button>
+        <button id="addGeoDynamicLayer" class="btn btn-primary">增加不同地理坐标系统动态图层</button>
+        <button id="addProjDynamicLayer" class="btn btn-primary">增加不同投影坐标系统动态图层</button>
+    </div>
+</div>
+
+</body>
+</html>
