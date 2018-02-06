@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>WebGIS</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/dojo/dijit/themes/tundra/tundra.css" />
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="theme/css/font-awesome.css">
+    <style type="text/css">
+        #mapDiv{
+            height: 700px;
+            width:1220px;
+        }
+        .contentPane{
+            display: none;
+        }
+
+    </style>
+    <script src="http://js.arcgis.com/3.23/"></script>
+    <script type="text/javascript">
+        require(["esri/map","dojo/dom","dojo/on",
+                "esri/layers/ArcGISDynamicMapServiceLayer",
+                "dojo/query","esri/toolbars/draw",
+                "esri/symbols/SimpleLineSymbol","esri/graphic","esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleFillSymbol","dojo/domReady!"],
+            function (Map,dom,on, ArcGISDynamicMapServiceLayer,query, Draw, SimpleLineSymbol,Graphic,SimpleMarkerSymbol,SimpleFillSymbol) {
+                var map = new esri.Map("mapDiv",{
+                    logo:false,
+                    isPinchZoom:false,
+                    slider:false
+                });
+            var layer=new ArcGISDynamicMapServiceLayer("http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer");
+            map.addLayer(layer);
+//            创建绘图对象
+            var toolbar=new Draw(map, { showTooltips: true });
+//            定义绘制的点、线、面的样式
+            var lineSymbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 3);
+            var marker= new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE,10, lineSymbol, new dojo.Color([255, 0, 0]));
+            var fill= new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, lineSymbol,  new dojo.Color([255, 0, 0]));
+//            给绘图工具绑定绘图完成事件
+            on(toolbar,"draw-complete", function (result) {
+                //获得几何形状
+                var geometry=result.geometry;
+                //获得形状的类型
+                var type=geometry.type;
+                //声明图形对象
+                var graphic;
+                //通过几何形状的类型，创建不同的图形
+                switch (type) {
+                    case "point":
+                        graphic= new Graphic(geometry, marker);
+                        break;
+                    case "polyline":
+                        graphic= new Graphic(geometry, lineSymbol);
+                        break;
+                    case "polygon":
+                        graphic= new Graphic(geometry, fill);
+                        break;
+                }
+//               将绘制的图形添加到地图中
+                map.graphics.add(graphic);
+                //关掉绘图工具
+                toolbar.deactivate();
+            });
+//           给每一个button绑定相应的事件（激活绘图工具）
+            query("button").on("click",function(event){
+                var value=this.innerHTML;
+                switch(value){
+                    case "点":{
+                        //激活绘图工具（画点）
+                        toolbar.activate(Draw.POINT, {
+                            showTooltips:true
+                        })
+                        break;
+
+                    }
+                    case "线":{
+                        //激活绘图工具（画折线）
+                        toolbar.activate(Draw.POLYLINE, {
+                            showTooltips:true
+                        })
+                        break;
+                    }
+                    case "面":{
+                        //激活绘图工具（绘制面）
+                        toolbar.activate(Draw.POLYGON, {
+                            showTooltips:true
+                        })
+                        break;
+                    }
+                    case "徒手线":{
+                        //激活绘图工具（徒手线）
+                        toolbar.activate(Draw.FREEHAND_POLYLINE, {
+                            showTooltips:true
+                        })
+                        break;
+                    }
+                    case "徒手面":{
+                        //激活绘图工具（徒手面）
+                        toolbar.activate(Draw.FREEHAND_POLYGON, {
+                            showTooltips:true
+                        })
+                        break;
+                    }
+
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+ <div >
+    <div  style="position:absolute;width: 310px;left: 5px;top: 5px;">
+        <div class="panel panel-primary" style="height: 700px">
+            <div class="panel panel-heading">绘图工具</div>
+            <div class="panel panel-body">
+                <button class="btn btn-info"  id="point">点</button>
+                <button class="btn btn-info" id="line">线</button>
+                <button class="btn btn-info" id="polygon">面</button>
+                <button class="btn btn-info" id="circle">徒手线</button>
+                <button class="btn btn-info" id="rectangle">徒手面</button>
+                <hr>
+                <div class="input-group" style="top: 10px;">
+                    <input type="text" class="form-control"><span class="input-group-addon btn btn-primary">搜索</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+     <div  id="mapDiv" class="panel" style="float: right;position: relative; top: 5px;">
+     </div>
+</div>
+</body>
+</html>
