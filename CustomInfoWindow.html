@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Info Template</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <link rel="stylesheet" type="text/css" href="sample.css" />
+    <style>
+        html, body{
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script type="text/javascript" src="js/InfoTip.js"></script>
+    <script type="text/javascript">
+        var map, iTip;
+        require(["dojo/parser", "esri/geometry/Extent", "esri/Color", "esri/map", "esri/layers/ArcGISTiledMapServiceLayer",
+            "esri/geometry/Point", "esri/SpatialReference", "esri/graphic", "esri/InfoTemplate", "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol", "dojo/store/JsonRest", "dojo/domReady!"],
+            function (parser, Extent, Color, Map, ArcGISTiledMapServiceLayer, Point, SpatialReference, Graphic, InfoTemplate, SimpleMarkerSymbol, SimpleLineSymbol, JsonRest) {
+                parser.parse();
+
+                var extent = new Extent({
+                    "xmin": -122.53154754638672, "ymin": 37.68379211425781,
+                    "xmax": -122.32555389404297, "ymax": 37.82112121582031,
+                    "spatialReference": { "wkid": 4326 }
+                })
+                map = new Map("mapDiv", {
+                    extent: extent
+                });
+                var agoServiceURL = "http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer";
+                var agoLayer = new ArcGISTiledMapServiceLayer(agoServiceURL);
+                map.addLayer(agoLayer);
+
+                iTip = new InfoTip("i2Div", "infoTip white", map.position, true);
+
+                var infoTemplate = new InfoTemplate("${name}", "${url}");
+                var symbol = new SimpleMarkerSymbol(
+                  SimpleMarkerSymbol.STYLE_CIRCLE,
+                  15,
+                  new SimpleLineSymbol(
+                    SimpleLineSymbol.STYLE_SOLID,
+                    new Color([0, 0, 255, 0.5]),
+                    8),
+                  new Color([0, 0, 255])
+                );
+
+                map.on("load", addPointGraphics);
+
+                function addPointGraphics() {
+                    var store = new JsonRest({ target: "Data/PointData.json" });
+                    store.query({ id: "*" }).then(function (result, request) {
+                        var items = result.items;
+                        for (var i = 0; i < items.length; i++) {
+                            var attr = {
+                                "name": items[i].name,
+                                "url": items[i].url
+                            };
+                            var loc = new Point(items[i].x, items[i].y, new SpatialReference({ wkid: 4326 }));
+                            var graphic = new Graphic(loc, symbol, attr, infoTemplate);
+                            map.graphics.add(graphic);
+                        }
+                    });
+
+                    map.graphics.on("mouse-over", g_onMouseOverHandler);
+                    map.graphics.on("mouse-out", g_onMouseOutHandler);
+                }
+
+                function g_onMouseOverHandler(evt) {
+                    if (evt.graphic.attributes) {
+                        var img = '<img src="images/i_flag.png"/ style="height:20px;width20px;border:0;">';
+                        iTip.setContent(img + "&nbsp;" + evt.graphic.attributes.name);
+                        iTip.show(evt.screenPoint);
+                    }
+                }
+
+                function g_onMouseOutHandler(evt) {
+                    iTip.hide();
+                }
+            }
+        );
+    </script>
+</head>
+<body class="claro">
+    <h1>具有淡出/淡入效果的信息窗口</h1>
+    <div id="mapDiv" style="width:600px;height:400px;">
+    </div>
+    <p>
+        选择信息窗口的位置（默认为上部）：
+		<input type="button" value="左" onclick="iTip.setLocation('left')"/>
+		<input type="button" value="右" onclick="iTip.setLocation('right')"/>
+		<input type="button" value="上" onclick="iTip.setLocation('top')"/>
+		<input type="button" value="下" onclick="iTip.setLocation('bottom')"/>
+    </p>
+    <p>
+        选择背景样式（默认为白色）：
+		<input type="button" value="绿色" onclick="iTip.setClass('infoTip green')"/>			
+		<input type="button" value="背景图片" onclick="iTip.setClass('infoTip bgimage')"/>
+		<input type="button" value="黑色" onclick="iTip.setClass('infoTip roundcorner black')"/>
+		<input type="button" value="白色" onclick="iTip.setClass('infoTip shadow')"/>
+    </p>
+</body>
+</html>

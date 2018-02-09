@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Info Template</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css" />
+    <style>
+        html, body, #mapDiv{
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script type="text/javascript">
+        var map;
+        require(["dojo/parser", "esri/geometry/Extent", "esri/Color", "esri/map", "esri/layers/ArcGISTiledMapServiceLayer",
+            "esri/geometry/Point", "esri/SpatialReference", "esri/graphic", "esri/InfoTemplate", "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol", "dojo/store/JsonRest", "dojo/domReady!"],
+            function (parser, Extent, Color, Map, ArcGISTiledMapServiceLayer, Point, SpatialReference, Graphic, InfoTemplate, SimpleMarkerSymbol, SimpleLineSymbol, JsonRest) {
+                parser.parse();
+                //  创建一个显示的视图
+                var extent = new Extent({
+                    "xmin": 103.53154754638672, "ymin": 35.68379211425781,
+                    "xmax": 103.32555389404297, "ymax": 36.82112121582031,
+                    "spatialReference": { "wkid": 4326 }
+                })
+                map = new Map("mapDiv", {
+                    extent: extent
+                });
+                var agoServiceURL = "http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer";
+                var agoLayer = new ArcGISTiledMapServiceLayer(agoServiceURL);
+                map.addLayer(agoLayer);
+                //创建信息模板，读取JSON数据中的 name 值以及 url值
+                var infoTemplate = new InfoTemplate("${name}", "${url}");
+                //  设置 x ， y 值构成的点的形状
+                var symbol = new SimpleMarkerSymbol(
+                  SimpleMarkerSymbol.STYLE_CIRCLE,
+                  15,
+                  new SimpleLineSymbol(
+                    SimpleLineSymbol.STYLE_SOLID,
+                    new Color([0, 0, 255, 0.5]),
+                    8
+                  ),
+                  new Color([0, 0, 255])
+                );
+
+                //            地图加载完成后，执行addPointGraphics函数
+                map.on("load", addPointGraphics);                
+
+                function addPointGraphics() {
+                    // 使用 dojo/store 类的 JSONRest 方法读入数据
+                    var store = new JsonRest({ target: "Data/PointData.json" });
+                    // 利用store对象的query函数，首先获取id，然后读取 name 以及 url 
+                    store.query({ id: "*" }).then(function (result, request) {
+                        var items = result.items;
+                        for (var i = 0; i < items.length; i++) {                            
+                            var attr = {
+                                "name": items[i].name,
+                                "url": items[i].url
+                            };
+                            // 根据获取的x y值构造点对象
+                            var loc = new Point(items[i].x, items[i].y, new SpatialReference({ wkid: 4326 }));
+                           // 构造图形
+                            var graphic = new Graphic(loc, symbol, attr, infoTemplate);
+                            // 将图形添加到地图中
+                            map.graphics.add(graphic);
+                        }
+                    });
+                    //  下面两句是执行鼠标移入以及移除触发显示信息窗口以及关闭信息窗口
+                    map.graphics.on("mouse-over", g_onMouseOverHandler);
+                    map.graphics.on("mouse-out", g_onMouseOutHandler);
+                }                
+                //  鼠标移入显示信息窗口
+                function g_onMouseOverHandler(evt) {
+                    if (evt.graphic.attributes) {
+                        map.infoWindow.setTitle(evt.graphic.attributes.name);
+                        map.infoWindow.setContent(evt.graphic.attributes.url);
+                        map.infoWindow.show(evt.screenPoint);
+                    }
+                }
+                //  鼠标移除显示信息窗口
+                function g_onMouseOutHandler(evt) {
+                    map.infoWindow.hide();
+                }
+            }
+        );        
+    </script>
+</head>
+<body class="claro">
+    <div id="mapDiv"></div>
+</body>
+</html>
