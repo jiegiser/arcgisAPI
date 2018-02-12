@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.23/dijit/themes/claro/claro.css"/>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/3.23/esri/css/esri.css"/>
+    <style>
+        html, body, #mapDiv {
+            padding: 0;
+            margin: 0;
+            width:100%;
+            height: 100%;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.23/"></script>
+    <script type="text/javascript">
+        require(["esri/map", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/FeatureLayer","dojo/domReady!"],
+            function (Map, ArcGISTiledMapServiceLayer, FeatureLayer) {
+                var map=new esri.Map("mapDiv",{
+                    center:[-77.036,38.891],
+                    zoom:16
+                });
+                var agoServiceURL = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer";
+                agoLayer = new ArcGISTiledMapServiceLayer(agoServiceURL);
+                map.addLayer(agoLayer);
+                var operationsLayer=new FeatureLayer("http://sampleserver5.arcgisonline.com/arcgis/rest/services/Energy/HSEC/FeatureServer/0",{
+                    mode:FeatureLayer.MODE_ONDEMAND,
+                    outFields:["*"]
+                });
+                map.addLayer(operationsLayer);
+            });
+    </script>
+</head>
+<body class="claro">
+<div id="mapDiv">
+</div>
+</body>
+</html>
