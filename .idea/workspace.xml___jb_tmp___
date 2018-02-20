@@ -57,8 +57,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="74" column="68" lean-forward="false" selection-start-line="74" selection-start-column="68" selection-end-line="74" selection-end-column="68" />
+            <state relative-caret-position="480">
+              <caret line="20" column="27" lean-forward="true" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -67,7 +67,7 @@
       <file leaf-file-name="featureServer.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/featureServer.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-37">
+            <state relative-caret-position="216">
               <caret line="9" column="20" lean-forward="false" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="20" />
               <folding />
             </state>
@@ -281,8 +281,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -403,14 +403,15 @@
       <workItem from="1518709870922" duration="599000" />
       <workItem from="1518874518062" duration="1157000" />
       <workItem from="1518962968932" duration="274000" />
+      <workItem from="1519133770328" duration="22000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="124636000" />
+    <option name="totallyTimeSpent" value="124658000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1932" height="1048" extended-state="0" />
+    <frame x="-9" y="-9" width="1932" height="1048" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26907" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -825,7 +826,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/featureServer.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-37">
+        <state relative-caret-position="216">
           <caret line="9" column="20" lean-forward="false" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="20" />
           <folding />
         </state>
@@ -833,8 +834,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="74" column="68" lean-forward="false" selection-start-line="74" selection-start-column="68" selection-end-line="74" selection-end-column="68" />
+        <state relative-caret-position="480">
+          <caret line="20" column="27" lean-forward="true" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
           <folding />
         </state>
       </provider>
