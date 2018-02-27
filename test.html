@@ -25,6 +25,17 @@
     symbol.setColor(new Color([255,0,0]));
 
     var symbol=new SimpleMarkerSymbol().setSize(10).setColor([255,0,0]);
+    require(["esri/TimeExtent","esri/layers/FeatureLayer"],function (TimeExtent,FeatureLayer) {
+        var featureLayer=new FeatureLayer("https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Hurricanes/NOAA_Tracks_1851_2007/MapServer/0",{
+            mode:FeatureLayer.MODE_SNAPSHOT,
+            outFields:["*"]
+        });
+        var timeExtent=new TimeExtent();
+        var now=new Date();
+        timeExtent.endTime=now;
+        timeExtent.startTime=date.add(timeExtent.endTime,"day",-7);
+        featureLayer.setTimeDefinition(timeExtent);
+    })
 </script>
 </body>
 </html>
