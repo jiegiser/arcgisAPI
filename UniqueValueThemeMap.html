@@ -31,6 +31,7 @@
             map.addLayer(agoLayer);
             map.on("load",addFeatureLayer);
             function addFeatureLayer() {
+//               当值或中断无法匹配时使用的默认符号。
                 var defaultSymbol=new SimpleFillSymbol().setStyle(SimpleFillSymbol.STYLE_NULL);
                 defaultSymbol.outline.setStyle(SimpleLineSymbol.STYLE_NULL);
 //                创建渲染器
@@ -46,7 +47,9 @@
                 renderer.addValue("E S Cen",new SimpleFillSymbol().setColor(new Color([127,127,127,0.5])));
                 renderer.addValue("W S Cen",new SimpleFillSymbol().setColor(new Color([0,0,0,0.5])));
                 var featureLayer=new FeatureLayer("http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Specialty/ESRI_StateCityHighway_USA/MapServer/1",{
+//                    设置信息窗口，读入SUB_REGION字段的值
                     infoTemplate:new InfoTemplate(" ","${SUB_REGION}"),
+//                    设置地图的显示模式为按需模式
                     mode:FeatureLayer.MODE_ONDEMAND,
                     outFields:["SUB_REGION"]
                 });
