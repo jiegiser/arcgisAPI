@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ee8c2317-16a8-4ff8-94ba-3418e993cf9b" name="Default" comment="" />
+    <list default="true" id="ee8c2317-16a8-4ff8-94ba-3418e993cf9b" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -31,8 +33,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="841">
-              <caret line="90" column="25" lean-forward="false" selection-start-line="90" selection-start-column="25" selection-end-line="90" selection-end-column="25" />
+            <state relative-caret-position="385">
+              <caret line="89" column="77" lean-forward="false" selection-start-line="89" selection-start-column="77" selection-end-line="89" selection-end-column="77" />
               <folding />
             </state>
           </provider>
@@ -176,8 +178,8 @@
         <option value="$PROJECT_DIR$/test.html" />
         <option value="$PROJECT_DIR$/UniqueValueThemeMap.html" />
         <option value="$PROJECT_DIR$/DotsensityThemeMap.html" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/CLassBreaksThemeMap.html" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -404,12 +406,12 @@
       <workItem from="1519653514953" duration="7000" />
       <workItem from="1519690841630" duration="10610000" />
       <workItem from="1519867429270" duration="9038000" />
-      <workItem from="1519948143352" duration="750000" />
+      <workItem from="1519948143352" duration="818000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="147199000" />
+    <option name="totallyTimeSpent" value="147267000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="1924" height="1038" extended-state="0" />
@@ -831,8 +833,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="841">
-          <caret line="90" column="25" lean-forward="false" selection-start-line="90" selection-start-column="25" selection-end-line="90" selection-end-column="25" />
+        <state relative-caret-position="385">
+          <caret line="89" column="77" lean-forward="false" selection-start-line="89" selection-start-column="77" selection-end-line="89" selection-end-column="77" />
           <folding />
         </state>
       </provider>
