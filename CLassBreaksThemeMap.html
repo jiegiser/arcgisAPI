@@ -1,10 +1,79 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>范围专题图</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
+    <style>
+        html, body, #map {
+            height: 100%;
+            margin: 0;
+        }
+        #info {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font: 14px sans-serif;
+            background: #fff;
+            width: 160px;
+            text-align: center;
+            border-radius: 0 0 0 10px;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script>
+        var map;
+        require(["esri/map", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/FeatureLayer",
+            "esri/InfoTemplate", "esri/renderers/ClassBreaksRenderer", "esri/symbols/SimpleFillSymbol", "esri/dijit/Legend",
+            "esri/Color", "dojo/domReady!"
+        ], function (Map, ArcGISTiledMapServiceLayer, FeatureLayer,
+                     InfoTemplate, ClassBreaksRenderer, SimpleFillSymbol, Legend, Color
+        ) {
+            map = new Map("map");
+
+            var baseMapUrl = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer";
+            var baseMap = new ArcGISTiledMapServiceLayer(baseMapUrl);
+            map.addLayer(baseMap);
+
+            var layerUrl = "http://services.arcgis.com/BG6nSlhZSAWtExvp/ArcGIS/rest/services/Demographics_World_Simp/FeatureServer/0";
+            var layer = new FeatureLayer(layerUrl, {
+                infoTemplate: new InfoTemplate("${CNTRY_NAME}", "${*}"),
+                mode: FeatureLayer.MODE_ONDEMAND,
+                outFields: ["*"]
+            });
+
+            var symbol = new SimpleFillSymbol();
+            symbol.setColor(new Color([150, 150, 150, 0.5]));
+
+            var renderer = new ClassBreaksRenderer(symbol, "POP2007");
+            renderer.addBreak(0, 10000000, new SimpleFillSymbol().setColor(new Color([56, 168, 0, 0.5])));
+            renderer.addBreak(10000000, 50000000, new SimpleFillSymbol().setColor(new Color([139, 209, 0, 0.5])));
+            renderer.addBreak(50000000, 100000000, new SimpleFillSymbol().setColor(new Color([255, 255, 0, 0.5])));
+            renderer.addBreak(100000000, 500000000, new SimpleFillSymbol().setColor(new Color([255, 128, 0, 0.5])));
+            renderer.addBreak(500000000, Infinity, new SimpleFillSymbol().setColor(new Color([255, 0, 0, 0.5])));
+
+            layer.setRenderer(renderer);
+            map.addLayer(layer);
+
+            layer.on("load", function () {
+
+                var legend = new Legend({
+                    map: map,
+                    layerInfos: [{
+                        layer: layer,
+                        title: "各国人口"
+                    }]
+                }, "legend");
+                legend.startup();
+            });
+        });
+    </script>
 </head>
 <body>
-
+<div id="map"></div>
+<div id="info">
+    <div id="legend"></div>
+</div>
 </body>
-</html>
+</html>  
