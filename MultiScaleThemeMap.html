@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>多比例尺专题图</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
+    <style>
+        html, body, #map {
+            height: 100%;
+            margin: 0;
+        }
+        #info {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font: 14px sans-serif;
+            background: #fff;
+            width: 160px;
+            text-align: center;
+            border-radius: 0 0 0 10px;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script>
+        var map;
+        require(["esri/map", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/FeatureLayer",
+          "esri/InfoTemplate", "esri/renderers/ScaleDependentRenderer", "esri/renderers/SimpleRenderer",
+          "esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleMarkerSymbol", 
+          "esri/dijit/Legend", "esri/Color", "dojo/domReady!"
+        ], function (Map, ArcGISTiledMapServiceLayer, FeatureLayer,
+          InfoTemplate, ScaleDependentRenderer, SimpleRenderer, SimpleLineSymbol, SimpleMarkerSymbol,
+          Legend, Color
+        ) {
+            map = new Map("map");
+
+            var baseMapUrl = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer";
+            var baseMap = new ArcGISTiledMapServiceLayer(baseMapUrl);
+            map.addLayer(baseMap);
+
+            var layerUrl = "http://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/WorldCities/FeatureServer/0";
+            var layer = new FeatureLayer(layerUrl, {
+                infoTemplate: new InfoTemplate("${name_en}", "${*}"),
+                mode: FeatureLayer.MODE_SNAPSHOT,
+                outFields: ["*"]
+            });
+
+            var markerSym = new SimpleMarkerSymbol();
+            markerSym.setColor(new Color([255, 0, 0]));
+            markerSym.setOutline(markerSym.outline.setColor(new Color([133, 197, 133, .75])));
+            var renderer1 = new SimpleRenderer(markerSym);
+            var proportionalSymbolInfo = {
+                field: "pop",
+                valueUnit: "unknown",
+                minDataValue: 1000000,
+                minSize: 3,
+                maxSize: 20,
+                legendOptions: {
+                    customValues: [1000000, 5000000, 10000000, 20000000, 30000000, 40000000]
+                }
+            };
+            renderer1.setProportionalSymbolInfo(proportionalSymbolInfo);
+
+            //for the second renderer increase the dot sizes and set a backgroundFillSymbol
+            var renderer2 = new SimpleRenderer(markerSym);
+            var proportionalSymbolInfo2 = {
+                field: "pop",
+                valueUnit: "unknown",
+                minDataValue: 1000000,
+                minSize: 10,
+                maxSize: 30,
+                legendOptions: {
+                    customValues: [1000000, 5000000, 10000000, 20000000, 30000000, 40000000]
+                }
+            };
+            renderer2.setProportionalSymbolInfo(proportionalSymbolInfo2);
+
+            var proportionalSymbolInfo = {
+                field: "pop",
+                valueUnit: "unknown",
+                minDataValue: 1000000,
+                minSize: 3,
+                maxSize: 30,
+                legendOptions: {
+                    customValues: [1000000, 5000000, 10000000, 20000000, 30000000, 40000000]
+                }
+            };
+
+            var params = {
+                rendererInfos: [{
+                    "renderer": renderer1,
+                    "minScale": 500000000,
+                    "maxScale": 50000000
+                }, {
+                    "renderer": renderer2,
+                    "minScale": 50000000
+                }]
+            };
+
+            var scaleDependentRenderer = new ScaleDependentRenderer(params);
+            layer.setRenderer(scaleDependentRenderer);
+
+            layer.on("load", function () {                
+                var legend = new Legend({
+                    map: map,
+                    layerInfos: [{
+                        layer: layer,
+                        title: "世界大城市"
+                    }]
+                }, "legend");
+                legend.startup();
+            });
+            map.addLayer(layer);
+        });
+    </script>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="info">
+      <div id="legend"></div>
+    </div>
+</body>
+</html>  
