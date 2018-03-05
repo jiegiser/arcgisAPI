@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>等级符号专题图</title>
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
+    <style>
+        html, body, #map {
+            height: 100%;
+            margin: 0;
+        }
+        #info {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font: 14px sans-serif;
+            background: #fff;
+            width: 160px;
+            text-align: center;
+            border-radius: 0 0 0 10px;
+        }
+    </style>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script>
+        var map;
+        require(["esri/map", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/FeatureLayer",
+          "esri/InfoTemplate", "esri/renderers/DotDensityRenderer", "esri/symbols/SimpleLineSymbol",
+          "esri/dijit/Legend", "esri/Color", "dojo/domReady!"
+        ], function (Map, ArcGISTiledMapServiceLayer, FeatureLayer,
+          InfoTemplate, DotDensityRenderer, SimpleLineSymbol, Legend, Color
+        ) {
+            map = new Map("map");
+
+            var baseMapUrl = "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer";
+            var baseMap = new ArcGISTiledMapServiceLayer(baseMapUrl);
+            map.addLayer(baseMap);
+
+            var layerUrl = "http://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/WorldCities/FeatureServer/0";
+            var layer = new FeatureLayer(layerUrl, {
+                infoTemplate: new InfoTemplate("${name_en}", "${*}"),
+                mode: FeatureLayer.MODE_SNAPSHOT,
+                outFields: ["*"]
+            });
+
+            var proportionalSymbolInfo = {
+                field: "pop",
+                valueUnit: "unknown",
+                minDataValue: 1000000,
+                minSize: 3,
+                maxSize: 30,
+                legendOptions: {
+                    customValues: [1000000, 5000000, 10000000, 20000000, 30000000, 40000000]
+                }
+            };
+
+            layer.on("load", function () {
+                layer.renderer.setProportionalSymbolInfo(proportionalSymbolInfo);
+                var legend = new Legend({
+                    map: map,
+                    layerInfos: [{
+                        layer: layer,
+                        title: "世界大城市"
+                    }]
+                }, "legend");
+                legend.startup();
+            });
+            map.addLayer(layer);
+        });
+    </script>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="info">
+      <div id="legend"></div>
+    </div>
+</body>
+</html>  
